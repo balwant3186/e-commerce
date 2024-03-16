@@ -5,6 +5,7 @@ import qs from 'qs'
 
 import type { Product } from '../../../payload/payload-types'
 import type { ArchiveBlockProps } from '../../_blocks/ArchiveBlock/types'
+import { useFilter } from '../../_providers/Filter'
 import { Card } from '../Card'
 import { Gutter } from '../Gutter'
 import { PageRange } from '../PageRange'
@@ -38,8 +39,8 @@ export type Props = {
 }
 
 export const CollectionArchive: React.FC<Props> = props => {
+  const { categoryFilters, sort } = useFilter()
   const {
-    categories: catsFromProps,
     className,
     limit = 10,
     onResultChange,
@@ -49,7 +50,6 @@ export const CollectionArchive: React.FC<Props> = props => {
     relationTo,
     selectedDocs,
     showPageRange,
-    sort = '-createdAt',
   } = props
 
   const [results, setResults] = useState<Result>({
@@ -75,9 +75,10 @@ export const CollectionArchive: React.FC<Props> = props => {
   const isRequesting = useRef(false)
   const [page, setPage] = useState(1)
 
-  const categories = (catsFromProps || [])
-    .map(cat => (typeof cat === 'object' ? cat?.id : cat))
-    .join(',')
+  const categories =
+    typeof categoryFilters === 'string'
+      ? [categoryFilters]
+      : categoryFilters.map((cat: string) => cat).join(',')
 
   const scrollToRef = useCallback(() => {
     const { current } = scrollRef
@@ -116,7 +117,7 @@ export const CollectionArchive: React.FC<Props> = props => {
           page,
           sort,
           where: {
-            ...(categories
+            ...(categoryFilters
               ? {
                   categories: {
                     in: categories,
@@ -162,7 +163,7 @@ export const CollectionArchive: React.FC<Props> = props => {
     return () => {
       if (timer) clearTimeout(timer)
     }
-  }, [page, categories, relationTo, onResultChange, sort, limit, populateBy])
+  }, [page, categoryFilters, relationTo, onResultChange, sort, limit, populateBy])
 
   return (
     <div className={[classes.collectionArchive, className].filter(Boolean).join(' ')}>
