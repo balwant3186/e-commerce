@@ -40,7 +40,6 @@ export type Props = {
 
 export const CollectionArchive: React.FC<Props> = props => {
   const { categoryFilters, sort } = useFilter()
-  console.log('categoryFilters', categoryFilters)
   const {
     className,
     limit = 10,
