@@ -40,6 +40,7 @@ export type Props = {
 
 export const CollectionArchive: React.FC<Props> = props => {
   const { categoryFilters, sort } = useFilter()
+  console.log('categoryFilters', categoryFilters)
   const {
     className,
     limit = 10,
@@ -117,7 +118,7 @@ export const CollectionArchive: React.FC<Props> = props => {
           page,
           sort,
           where: {
-            ...(categoryFilters
+            ...(categories && categories.length
               ? {
                   categories: {
                     in: categories,
@@ -163,7 +164,7 @@ export const CollectionArchive: React.FC<Props> = props => {
     return () => {
       if (timer) clearTimeout(timer)
     }
-  }, [page, categoryFilters, relationTo, onResultChange, sort, limit, populateBy])
+  }, [page, categories, relationTo, onResultChange, sort, limit, populateBy])
 
   return (
     <div className={[classes.collectionArchive, className].filter(Boolean).join(' ')}>
