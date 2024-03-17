@@ -13,6 +13,7 @@ import classes from './index.module.scss'
 
 export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
   const navItems = header?.navItems || []
+  console.log('navItems', navItems)
   const { user } = useAuth()
 
   return (
@@ -31,8 +32,6 @@ export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
           onClick={() => (window.location.href = '/login')}
         />
       )}
-
-      {user && <CartLink />}
     </nav>
   )
 }
